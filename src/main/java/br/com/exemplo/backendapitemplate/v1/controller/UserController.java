@@ -19,11 +19,11 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers() {
         try{
             return ResponseEntity.ok(userService.findAll());
-        }catch (EntityNotFoundException e){
+        }catch(EntityNotFoundException e){
             return ResponseEntity.notFound().build();
-        }catch (IllegalArgumentException e){
+        }catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().build();
-        }catch (Exception e){
+        }catch(Exception e){
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -32,15 +32,54 @@ public class UserController {
     public ResponseEntity<User> getUserById(@PathVariable long id) {
         try{
             return ResponseEntity.ok(userService.findById(id));
-        }catch (EntityNotFoundException e){
+        }catch(EntityNotFoundException e){
             return ResponseEntity.notFound().build();
-        }catch (IllegalArgumentException e){
+        }catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().build();
-        }catch (Exception e){
+        }catch(Exception e){
             return ResponseEntity.internalServerError().build();
         }
     }
 
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        try{
+            return ResponseEntity.ok(userService.register(user));
+        }catch(EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }catch(Exception e){
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable long id, @RequestBody User user) {
+        try{
+            user.setId(id);
+            return ResponseEntity.ok(userService.update(user));
+        }catch(EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }catch(Exception e){
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<User> deleteUser(@PathVariable long id) {
+        try{
+            userService.delete(id);
+            return ResponseEntity.ok().build();
+        }catch(EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }catch(Exception e){
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
 }
