@@ -1,7 +1,7 @@
-package br.com.exemplo.backendapitemplate.service;
+package br.com.exemplo.backendapitemplate.v1.service;
 
-import br.com.exemplo.backendapitemplate.model.User;
-import br.com.exemplo.backendapitemplate.repository.UserRepository;
+import br.com.exemplo.backendapitemplate.v1.model.User;
+import br.com.exemplo.backendapitemplate.v1.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

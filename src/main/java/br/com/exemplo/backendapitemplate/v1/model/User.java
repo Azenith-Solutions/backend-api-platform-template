@@ -1,8 +1,9 @@
-package br.com.exemplo.backendapitemplate.model;
+package br.com.exemplo.backendapitemplate.v1.model;
 
 import jakarta.persistence.*;
 
 @Entity
+@Table(name="users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
