@@ -25,7 +25,7 @@ public class UserService {
 
         // if object exists
         if(!userRepository.existsById(id)){
-            throw new EntityNotFoundException("Usuário não encontrado");
+            throw new EntityNotFoundException("Usuário não encontrado.");
         }
 
         // mapping any errors
