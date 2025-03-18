@@ -2,6 +2,9 @@ package br.com.exemplo.backendapitemplate.v1.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name="users")
 public class User {
@@ -12,6 +15,8 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public User() {};
 
@@ -19,6 +24,8 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -51,5 +58,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

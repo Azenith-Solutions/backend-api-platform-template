@@ -2,6 +2,7 @@ package br.com.exemplo.backendapitemplate.v1.controller;
 
 import br.com.exemplo.backendapitemplate.v1.model.User;
 import br.com.exemplo.backendapitemplate.v1.service.UserService;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,10 @@ public class UserController {
     @GetMapping
     public ResponseEntity<?> getAllUsers() {
         try{
-            return ResponseEntity.ok(userService.findAll());
+            List<User> usersFound = userService.findAll();
+            return ResponseEntity.status(HttpStatus.OK).body(usersFound);
         }catch(EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch(IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -32,7 +32,8 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable long id) {
         try{
-            return ResponseEntity.ok(userService.findById(id));
+            User userFound = userService.findById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(userFound);
         }catch(EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(IllegalArgumentException e){
@@ -45,11 +46,14 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try{
-            return ResponseEntity.ok(userService.register(user));
+            User userCreated = userService.register(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userCreated);
         }catch(EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }catch(EntityExistsException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -59,9 +63,12 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody User user) {
         try{
             user.setId(id);
-            return ResponseEntity.ok(userService.update(user));
+            User userUpdated = userService.update(user);
+            return ResponseEntity.status(HttpStatus.OK).body(userUpdated);
         }catch(EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch(EntityExistsException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }catch(IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch(Exception e){
@@ -73,14 +80,13 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable long id) {
         try{
             userService.delete(id);
-            return ResponseEntity.ok().body("Usuário deletado com sucesso!");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuário deletado com sucesso!");
         }catch(EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }catch(IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-
         }
     }
 
